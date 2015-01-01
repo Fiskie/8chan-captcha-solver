@@ -14,35 +14,35 @@
  */
 function Node($resource) {
     var $element = $resource;
-
+    
     /**
      * Returns the element's offset.
      */
     this.getOffset = function() {
-        return $element.offset();
+        return this.getElement().offset();
     };
-
+    
     /**
      * Get the element's character.
      */
     this.getCharacter = function() {
-        return $element.text().trim();
+        return this.getElement().text().trim();
     };
-
+    
     /**
      * Get the node's element.
      */
     this.getElement = function() {
-        return $element;
+        return $($element[0]);
     }
-
+    
     /**
      * Returns the node's offset relative to the captcha.
      */
     this.getRelativeOffset = function(captcha) {
         var nodeOffset = this.getOffset();
         var captchaOffset = captcha.getOffset();
-
+        
         return {top: nodeOffset.top - captchaOffset.top, left: nodeOffset.left - captchaOffset.left};
     };
 }
@@ -52,21 +52,26 @@ function Node($resource) {
  */
 function Captcha($resource) {
     var $element = $resource;
-
+    
     /**
      * Returns the element's offset.
      */
     this.getOffset = function() {
-        return $element.offset();
+        return this.getElement().offset();
     };
-
+    
     /**
      * Returns the target frame's jQuery object.
+     * Because the floating reply form is duplicated, we gotta do some magic here.
      */
     this.getElement = function() {
-        return $element;
+        if ($('.ui-draggable[name="post"]').is(':hidden')) {
+            return $($element[0]);
+        } else {
+            return $($element[1]);
+        }
     };
-
+    
     /**
      * Returns all possible nodes that could make up the captcha as Node objects.
      *
@@ -74,26 +79,26 @@ function Captcha($resource) {
      */
     this.getNodes = function() {
         var frame = this;
-
-        var elements = $element.find('div')
-            .filter(':not(:has(*))');
-
+        
+        var elements = this.getElement().find('div')
+        .filter(':not(:has(*))');
+        
         var nodes = [];
-
+        
         elements.each(function(i) {
             nodes.push(new Node($(elements[i])));
         });
-
+        
         return nodes;
     };
-
+    
     /**
      * Returns the background color of the frame, which is really the color of the child div, but whatever.
      */
     this.getBackgroundColor = function() {
         return $element.children('div').css('background-color');
     }
-
+    
     /**
      * Returns true if the captcha actually exists.
      */
@@ -108,7 +113,7 @@ function Captcha($resource) {
 function CaptchaSolver(resource) {
     var $element = $(resource);
     this.captcha = new Captcha($element);
-
+    
     /**
      * Loads the captcha and fires a callback upon success.
      */
@@ -118,7 +123,7 @@ function CaptchaSolver(resource) {
         console.log("Waiting for captcha...");
         this.checkReadyRoutine(callback);
     }
-
+    
     /**
      * Status checking routine.
      */
@@ -131,36 +136,36 @@ function CaptchaSolver(resource) {
             setTimeout(function(){_this.checkReadyRoutine(callback)}, 100);
         }
     }
-
+    
     /**
      * Attempt to crack the captcha.
      */
     this.solve = function(callback) {
         var _this = this;
-
+        
         this.loadCaptcha(function() {
             // So I don't have to deal with _this
             _this.onCaptchaRetrieved(callback);
         });
     };
-
+    
     /**
      * What to do when we have retrieved a captcha.
      */
     this.onCaptchaRetrieved = function(callback) {
         var nodes = this.captcha.getNodes();
-
+        
         nodes = this.filterNodes(nodes);
-
+        
         orderNodes(nodes);
-
+        
         //$(nodes).each(function(i) {
         //    console.log(this.getElement()[0]);
         //});
-
+        
         callback(getAnswer(nodes));
     };
-
+    
     /**
      * Order the nodes by left offset via exchange sort.
      */
@@ -175,7 +180,7 @@ function CaptchaSolver(resource) {
             }
         }
     };
-
+    
     /**
      * Get the answer from the remaining nodes.
      * A character slightly cut off on the end of the captcha field might add a value.
@@ -183,60 +188,60 @@ function CaptchaSolver(resource) {
      */
     var getAnswer = function(nodes) {
         var str = "";
-
+        
         for (var i = 0; i < nodes.length && i < 6; i++) {
             str += nodes[i].getCharacter();
         }
-
+        
         return str;
     };
-
+    
     /**
      * Return a list of valid nodes.
      */
     this.filterNodes = function(nodes) {
         var _this = this;
-
+        
         var filtered = [];
-
+        
         $(nodes).each(function(i) {
             // Filter nodes with display:none or visibility:hidden... because they are invisible.
             if (this.getElement().css('visibility') === 'hidden' || this.getElement().css('display') === 'none') {
                 return true;
             }
-
+            
             // Filter nodes which share the same color as the background color of the captcha.
             if (this.getElement().css('color') === _this.captcha.getBackgroundColor()) {
                 return true;
             }
-
+            
             var offset = this.getRelativeOffset(_this.captcha);
-
+            
             // Filter nodes that are outside the captcha frame, and to an extent a border where letters cannot possibly fit.
             if (offset.top < 5 || offset.left < 5 || offset.top >= 70 || offset.left >= 290) {
                 return true;
             }
-
+            
             // Filter nodes that are less than 20px in font size.
             if (parseInt(this.getElement().css('font-size'), 10) < 20) {
                 return true;
             }
-
+            
             // Filter nodes that don't have a valid width.
             if (this.getElement().width() <= 3 || this.getElement().height() <= 3) {
                 return true;
             }
-
+            
             // Filter nodes that appear upside down, since these end up being invisible.
             var rotation = getRotationDegrees(this.getElement());
-
+            
             if (rotation > 160 && rotation < 200) {
                 return true;
             }
-
+            
             filtered.push(this);
         });
-
+        
         return filtered;
     }
 }
@@ -258,9 +263,9 @@ function getRotationDegrees(obj) {
 }
 
 // Bind an event handler.
-$('.captcha_text').click(function() {
+$('body').on('click', '.captcha_text', function() {
     var solver = new CaptchaSolver('.captcha_html');
-
+    
     solver.solve(function(answer) {
         $('.captcha_text').val(answer);
     });
