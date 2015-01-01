@@ -5,6 +5,7 @@
 // @description  8chan captcha solving utility.
 // @author       Fiskie
 // @match        https://8chan.co/*
+// @match        http://8chan.co/*
 // @grant        GM_getValue
 // @grant        GM_setValue
 // ==/UserScript==
@@ -65,7 +66,7 @@ function Captcha($resource) {
      * Because the floating reply form is duplicated, we gotta do some magic here.
      */
     this.getElement = function() {
-        if ($('.ui-draggable[name="post"]').is(':hidden')) {
+        if ($element.length == 1 || $('.ui-draggable[name="post"]').is(':hidden')) {
             return $($element[0]);
         } else {
             return $($element[1]);
@@ -267,6 +268,7 @@ $('body').on('click', '.captcha_text', function() {
     var solver = new CaptchaSolver('.captcha_html');
     
     solver.solve(function(answer) {
+        console.log(answer);
         $('.captcha_text').val(answer);
     });
 });
