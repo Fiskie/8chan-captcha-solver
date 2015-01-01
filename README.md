@@ -16,6 +16,13 @@ My main intention for doing this was to see if I could crack it, since I had a h
 
 Hopefully this convinces ~someone~ to use a less exploitable captcha implementation, such as the new Google one.
 
+Installation
+------------
+
+Get Tampermonkey or whatever and install the script. I did not test it on Firefox.
+
 Usage
 -----
-This was designed to be used as a library and not a standalone script, but a simple implementation of the captcha solver that is  designed to trigger upon clicking the verification field is included with the script, so it is completely ready to go.
+
+1. Click the verification field.
+2. You're done.
