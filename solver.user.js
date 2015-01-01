@@ -4,8 +4,9 @@
 // @version      1.0
 // @description  8chan captcha solving utility.
 // @author       Fiskie
-// @match        https://8chan.co/*
-// @match        http://8chan.co/*
+// @include        https://8chan.co/*
+// @include        http://8chan.co/*
+// @require      http://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js
 // @grant        GM_getValue
 // @grant        GM_setValue
 // ==/UserScript==
