@@ -192,7 +192,32 @@ function CaptchaSolver(resource) {
         var str = "";
         
         for (var i = 0; i < nodes.length && i < 6; i++) {
-            str += nodes[i].getCharacter();
+            var char = nodes[i].getCharacter();
+            var rotation = getRotationDegrees(nodes[i].getElement());
+            
+            /*// Map some common upside down characters.
+            if (rotation > 150 && rotation < 210) {
+                switch (char) { 
+                    case "d":
+                        char = "p";
+                        break;
+                    case "p":
+                        char = "d";
+                        break;
+                }
+            } else {
+                // Some upside down characters can be here, like ǝ
+                switch (char) {
+                    case "ə":
+                        char = "e";
+                        break;
+                    case "ɐ":
+                    	char = "a";
+                        break;
+                }
+            }*/
+            
+            str += char;
         }
         
         return str;
@@ -234,10 +259,14 @@ function CaptchaSolver(resource) {
                 return true;
             }
             
-            // Filter nodes that appear upside down, since these end up being invisible.
-            var rotation = getRotationDegrees(this.getElement());
+            // Debugging the rotation stuff
+            console.log(nodes[i].getElement());
             
-            if (rotation > 160 && rotation < 200) {
+            var rotation = getRotationDegrees(nodes[i].getElement());
+            
+            // Filter nodes with upside down letters
+            // TODO figure out when this doesn't obscure the letter, because some can be upside down
+            if (rotation > 150 && rotation < 210) {
                 return true;
             }
             
