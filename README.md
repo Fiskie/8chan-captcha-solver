@@ -18,4 +18,4 @@ Hopefully this convinces ~someone~ to use a less exploitable captcha implementat
 
 Usage
 -----
-This was written to be used as a library, but a simple implementation of the captcha solver designed to trigger upon clicking the verification field is bundled with the userscript.
+This was designed to be used as a library and not a standalone script, but a simple implementation of the captcha solver that is  designed to trigger upon clicking the verification field is included with the script, so it is completely ready to go.
