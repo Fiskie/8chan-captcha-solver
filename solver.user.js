@@ -1,8 +1,8 @@
 // ==UserScript==
-// @name         8chan captcha cracker
+// @name         8chan captcha solver
 // @namespace    http://fiskie.me
 // @version      1.0
-// @description  8chan captcha cracking utility.
+// @description  8chan captcha solving utility.
 // @author       Fiskie
 // @match        https://8chan.co/*
 // @grant        GM_getValue
