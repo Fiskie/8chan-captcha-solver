@@ -26,3 +26,8 @@ Usage
 
 1. Click the verification field.
 2. You're done.
+
+Known Issues
+------------
+
+This doesn't work well with the floating reply box just yet.
