@@ -30,4 +30,6 @@ Usage
 Known Issues
 ------------
 
-This doesn't work well with the floating reply box just yet.
+1. This doesn't work well with the floating reply box just yet.
+2. Upside down characters are a bit of a bitch to deal with, because sometimes they're made invisible by their rotation but other times they aren't.
+3. Generally it's not as accurate as I'd like it to be and it'll be refined further. This script was the result of a lot of guesswork and done after a mild hangover.
