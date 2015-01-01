@@ -19,7 +19,7 @@ Hopefully this convinces ~someone~ to use a less exploitable captcha implementat
 Installation
 ------------
 
-Get Tampermonkey or whatever and install the script. I did not test it on Firefox.
+It's a userscript; use Tampermoney or Greasemonkey.
 
 Usage
 -----
