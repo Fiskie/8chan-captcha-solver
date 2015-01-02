@@ -3,6 +3,8 @@
 
 Simple captcha solving userscript for 8chan.
 
+The captcha system that this solver targeted has been deprecated, therefore this is now useless. Hurray!
+
 Introduction
 -----------
 
@@ -31,5 +33,4 @@ Known Issues
 ------------
 
 1. Triggering captcha currently makes the page scroll to the top.
-2. Upside down characters are a bit of a bitch to deal with, because sometimes they're made invisible by their rotation but other times they aren't.
-3. Generally it's not as accurate as I'd like it to be and it'll be refined further. This script was the result of a lot of guesswork and done after a mild hangover.
+2. Upside down characters are a bit of a bitch to deal with, because sometimes they're made invisible by their rotation but other times they aren't based on the pivot. Yet to figure that out.
