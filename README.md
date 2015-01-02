@@ -3,7 +3,7 @@
 
 Simple captcha solving userscript for 8chan.
 
-The captcha system that this solver targeted has been deprecated, therefore this is now useless. Hurray!
+The captcha system that this solver targeted has been deprecated because of it, therefore this is now useless. Hurray!
 
 Introduction
 -----------
